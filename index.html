@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 / 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .container {
+            width: 95vw;
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .tag-builder {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 2px solid #333;
+            width: 90%;
+            max-width: 1100px;
+            position: relative;
+        }
+        
+        .tag-display {
+            font-size: 2.5rem;
+            color: #f8f8f8;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            letter-spacing: 1px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: #0a0a0a;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #444;
+            line-height: 1.2;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        
+        .cursor {
+            position: absolute;
+            width: 4px;
+            height: 70%;
+            background-color: #00ff00;
+            animation: blink 1s infinite;
+            top: 15%;
+            display: none;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .image-display {
+            width: 600px;
+            height: 400px;
+            background: #0a0a0a;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #333;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .placeholder {
+            font-size: 1.5rem;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .image-display img {
+            display: none;
+            transition: all 0.3s ease;
+        }
+        
+        .next-button {
+            display: none;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .next-button:hover {
+            background: #3db8af;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .next-button:active {
+            transform: translateY(0);
+        }
+        
+        .tag-element {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .bracket {
+            color: #ff6b6b;
+        }
+        
+        .tag-name {
+            color: #4ecdc4;
+        }
+        
+        .attribute {
+            color: #ffe66d;
+        }
+        
+        .equals {
+            color: #ff6b6b;
+        }
+        
+        .value {
+            color: #1dd1a1;
+        }
+        
+        .slash {
+            color: #ff9ff3;
+        }
+        
+        .editable-value {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0 2px;
+        }
+        
+        .editable-value:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            box-shadow: 0 0 0 1px rgba(0, 168, 255, 0.5);
+        }
+        
+        .value-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #00a8ff;
+            border-radius: 4px;
+            color: #1dd1a1;
+            font-size: 2.5rem;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            z-index: 100;
+        }
+        
+        .highlight {
+            animation: highlight 0.5s ease;
+        }
+        
+        @keyframes highlight {
+            0% { background-color: transparent; }
+            50% { background-color: rgba(255, 255, 255, 0.2); }
+            100% { background-color: transparent; }
+        }
+        
+        .type-in {
+            animation: typeIn 0.5s ease;
+        }
+        
+        @keyframes typeIn {
+            0% { opacity: 0; transform: translateX(-10px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
+        @media (max-width: 900px) {
+            .tag-builder {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .tag-display {
+                font-size: 2rem;
+                min-height: 90px;
+                padding: 10px;
+            }
+            
+            .image-display {
+                width: 90%;
+                height: 300px;
+            }
+            
+            .value-input {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .tag-display {
+                font-size: 1.6rem;
+                min-height: 80px;
+            }
+            
+            .image-display {
+                height: 250px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .value-input {
+                font-size: 1.6rem;
+            }
+            
+            .next-button {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tag-builder">
+            <div class="tag-display" id="tagDisplay">
+                <div class="cursor" id="cursor"></div>
+            </div>
+        </div>
+        
+        <div class="image-display" id="imageDisplay">
+            <div class="placeholder">N/A</div>
+            <img id="actualImage" src="https://plus.unsplash.com/premium_photo-1754254834163-7d100f5a9f93?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image">
+        </div>
+        
+        <button class="next-button" id="nextButton">Next → Borders</button>
+    </div>
+
+    <script>
+        const steps = [
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element bracket">&gt;</span>',
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 3,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 4,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 5,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element value">"image.jpg"</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 6,
+                showImage: true,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element value">"image.jpg"</span><span class="tag-element attribute"> alt</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 7,
+                showImage: true,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element value">"image.jpg"</span><span class="tag-element attribute"> alt</span><span class="tag-element equals">=</span><span class="tag-element value">"Image"</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 9,
+                showImage: true,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element value">"image.jpg"</span><span class="tag-element attribute"> alt</span><span class="tag-element equals">=</span><span class="tag-element value">"Image"</span><span class="tag-element attribute"> width</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 10,
+                showImage: true,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element value">"image.jpg"</span><span class="tag-element attribute"> alt</span><span class="tag-element equals">=</span><span class="tag-element value">"Image"</span><span class="tag-element attribute"> width</span><span class="tag-element equals">=</span><span class="tag-element value editable-value" data-attribute="width" data-value="600">"600"</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 12,
+                showImage: true,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element value">"image.jpg"</span><span class="tag-element attribute"> alt</span><span class="tag-element equals">=</span><span class="tag-element value">"Image"</span><span class="tag-element attribute"> width</span><span class="tag-element equals">=</span><span class="tag-element value editable-value" data-attribute="width" data-value="600">"600"</span><span class="tag-element attribute"> height</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 13,
+                showImage: true,
+            },
+            { 
+                html: '<span class="tag-element bracket">&lt;</span><span class="tag-element tag-name">img</span><span class="tag-element attribute"> src</span><span class="tag-element equals">=</span><span class="tag-element value">"image.jpg"</span><span class="tag-element attribute"> alt</span><span class="tag-element equals">=</span><span class="tag-element value">"Image"</span><span class="tag-element attribute"> width</span><span class="tag-element equals">=</span><span class="tag-element value editable-value" data-attribute="width" data-value="600">"600"</span><span class="tag-element attribute"> height</span><span class="tag-element equals">=</span><span class="tag-element value editable-value" data-attribute="height" data-value="400">"400"</span><span class="tag-element slash">/</span><span class="tag-element bracket">&gt;</span>',
+                cursorPosition: 15,
+                showImage: true,
+                isLast: true
+            }
+        ];
+        
+        let currentStep = 0;
+        const tagDisplay = document.getElementById('tagDisplay');
+        const cursor = document.getElementById('cursor');
+        const imageDisplay = document.getElementById('imageDisplay');
+        const placeholder = document.querySelector('.placeholder');
+        const actualImage = document.getElementById('actualImage');
+        const nextButton = document.getElementById('nextButton');
+        let currentWidth = 600;
+        let currentHeight = 400;
+        
+        function updateDisplay() {
+            const step = steps[currentStep];
+            
+            tagDisplay.innerHTML = step.html + '<div class="cursor" id="cursor"></div>';
+            
+            if (step.cursorPosition !== undefined) {
+                positionCursor(step.cursorPosition);
+            } else {
+                cursor.style.display = 'none';
+            }
+            
+            if (step.showImage) {
+                placeholder.style.display = 'none';
+                actualImage.style.display = 'block';
+                updateImageSize();
+            } else {
+                placeholder.style.display = 'block';
+                actualImage.style.display = 'none';
+            }
+            
+            if (step.isLast) {
+                setTimeout(() => {
+                    nextButton.style.display = 'block';
+                }, 300);
+            } else {
+                nextButton.style.display = 'none';
+            }
+            
+            setTimeout(() => {
+                const elements = tagDisplay.querySelectorAll('.tag-element');
+                if (elements.length > 0 && currentStep > 0) {
+                    elements[elements.length - 1].classList.add('highlight');
+                    
+                    setTimeout(() => {
+                        elements[elements.length - 1].classList.remove('highlight');
+                    }, 500);
+                }
+            }, 100);
+            
+            setTimeout(() => {
+                setupEditableValues();
+            }, 50);
+        }
+        
+        function updateImageSize() {
+            if (currentStep >= 9) {
+                actualImage.style.maxWidth = 'none';
+                actualImage.style.maxHeight = 'none';
+                actualImage.style.width = currentWidth + 'px';
+                actualImage.style.height = currentHeight + 'px';
+                imageDisplay.style.width = '600px';
+                imageDisplay.style.height = '400px';
+            }
+        }
+        
+        function setupEditableValues() {
+            const editableValues = document.querySelectorAll('.editable-value');
+            
+            editableValues.forEach(valueElement => {
+                const newElement = valueElement.cloneNode(true);
+                valueElement.parentNode.replaceChild(newElement, valueElement);
+                
+                newElement.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openValueEditor(this);
+                });
+            });
+        }
+        
+        function openValueEditor(valueElement) {
+            const attribute = valueElement.getAttribute('data-attribute');
+            const currentValue = valueElement.getAttribute('data-value');
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'value-input';
+            input.value = currentValue;
+            
+            const rect = valueElement.getBoundingClientRect();
+            const parentRect = tagDisplay.getBoundingClientRect();
+            
+            input.style.position = 'absolute';
+            input.style.left = (rect.left - parentRect.left) + 'px';
+            input.style.top = (rect.top - parentRect.top) + 'px';
+            input.style.width = rect.width + 'px';
+            input.style.height = rect.height + 'px';
+            
+            tagDisplay.appendChild(input);
+            
+            input.focus();
+            input.select();
+            
+            const completeEdit = () => {
+                const newValue = input.value.trim();
+                
+                if (newValue && !isNaN(newValue) && parseInt(newValue) > 0) {
+                    const numValue = parseInt(newValue);
+                    
+                    valueElement.textContent = '"' + numValue + '"';
+                    valueElement.setAttribute('data-value', numValue);
+                    
+                    if (attribute === 'width') {
+                        currentWidth = numValue;
+                    } else if (attribute === 'height') {
+                        currentHeight = numValue;
+                    }
+                    
+                    updateImageSize();
+                }
+                
+                input.remove();
+            };
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    completeEdit();
+                } else if (e.key === 'Escape') {
+                    input.remove();
+                }
+            });
+            
+            input.addEventListener('blur', completeEdit);
+        }
+        
+        function positionCursor(position) {
+            const cursor = document.getElementById('cursor');
+            const tagElements = tagDisplay.querySelectorAll('.tag-element');
+            let totalWidth = 0;
+            let found = false;
+            
+            for (let i = 0; i < tagElements.length; i++) {
+                const element = tagElements[i];
+                const elementWidth = element.offsetWidth;
+                
+                if (i === position) {
+                    found = true;
+                    break;
+                }
+                
+                totalWidth += elementWidth;
+            }
+            
+            if (found) {
+                cursor.style.left = totalWidth + 'px';
+                cursor.style.display = 'block';
+            } else {
+                const totalContentWidth = tagDisplay.offsetWidth;
+                cursor.style.left = totalContentWidth + 'px';
+                cursor.style.display = 'block';
+            }
+        }
+        
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateDisplay();
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateDisplay();
+            }
+        }
+        
+        function resetDemo() {
+            currentStep = 0;
+            currentWidth = 600;
+            currentHeight = 400;
+            nextButton.style.display = 'none';
+            updateDisplay();
+        }
+        
+        function redirectToStyles() {
+            window.location.href = '/borders.html';
+        }
+        
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                nextStep();
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevStep();
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                resetDemo();
+            }
+        });
+        
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+        
+        tagDisplay.addEventListener('click', function(e) {
+            if (e.target === tagDisplay || 
+                (e.target.classList.contains('tag-element') && 
+                 !e.target.classList.contains('editable-value'))) {
+                nextStep();
+            }
+        });
+        
+        imageDisplay.addEventListener('click', function(e) {
+            if (e.target === imageDisplay || e.target.classList.contains('placeholder')) {
+                nextStep();
+            }
+        });
+        
+        nextButton.addEventListener('click', redirectToStyles);
+        
+        updateDisplay();
+        
+        setTimeout(() => {
+            tagDisplay.classList.add('type-in');
+        }, 500);
+    </script>
+</body>
+</html>
