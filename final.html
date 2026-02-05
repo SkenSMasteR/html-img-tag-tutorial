@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>3 / 3</title>
+	<style>
+		*{margin:0;padding:0;box-sizing:border-box;}
+		body{display:flex;justify-content:center;align-items:center;min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);font-family:'Courier New',monospace;overflow:hidden;user-select:none;}
+		.container{width:95vw;height:95vh;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+		.completion-card{background:#1a1a1a;border-radius:15px;padding:40px;box-shadow:0 10px 30px rgba(0,0,0,0.5);border:2px solid #333;width:90%;max-width:800px;position:relative;text-align:center;}
+		h1{color:#4ecdc4;font-size:2.8rem;margin-bottom:40px;font-weight:bold;text-shadow:0 2px 10px rgba(0,0,0,0.3);}
+		.contact-info{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px;}
+		.info-item{background:#2a2a2a;padding:20px;border-radius:10px;border:1px solid #444;transition:all 0.3s ease;}
+		.info-item:hover{transform:translateY(-5px);box-shadow:0 5px 15px rgba(0,0,0,0.3);border-color:#4ecdc4;}
+		.info-label{color:#ff6b6b;font-size:1.2rem;font-weight:bold;margin-bottom:8px;}
+		.info-value{color:#1dd1a1;font-size:1.3rem;word-break:break-all;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+		.info-value:hover{color:#4ecdc4;}
+		.contact-button{display:inline-block;background:#4ecdc4;color:white;border:none;padding:18px 50px;font-size:1.4rem;border-radius:10px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;margin-top:40px;transition:all 0.3s ease;box-shadow:0 5px 15px rgba(0,0,0,0.3);text-decoration:none;}
+		.contact-button:hover{background:#3db8af;transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.4);}
+		.contact-button:active{transform:translateY(0);}
+		@media (max-width:900px){.contact-info{grid-template-columns:1fr;}.completion-card{padding:30px;}h1{font-size:2.4rem;}}
+		@media (max-width:600px){.completion-card{padding:20px;}h1{font-size:2rem;}.info-item{padding:15px;}.info-label{font-size:1.1rem;}.info-value{font-size:1.2rem;}.contact-button{padding:15px 30px;font-size:1.2rem;}}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="completion-card">
+			<div class="contact-info">
+				<div class="info-item">
+					<div class="info-label">Email</div>
+					<div class="info-value" onclick="window.location.href='mailto:Contact@sslabs.online'">Contact@sslabs.online</div>
+				</div>
+				<div class="info-item">
+					<div class="info-label">Name</div>
+					<div class="info-value">SkenS MasteR</div>
+				</div>
+				<div class="info-item">
+					<div class="info-label">GitHub</div>
+					<div class="info-value" onclick="window.location.href='https://github.com/SkenSMasteR/'">github.com/SkenSMasteR</div>
+				</div>
+				<div class="info-item">
+					<div class="info-label">Project</div>
+					<div class="info-value" onclick="window.location.href='https://github.com/SkenSMasteR/html-img-tag-tutorial'">html-img-tag-tutorial</div>
+				</div>
+				<div class="info-item">
+					<div class="info-label">Website</div>
+					<div class="info-value" onclick="window.location.href='https://sslabs.online'">sslabs.online</div>
+				</div>
+				<div class="info-item">
+					<div class="info-label">SSMail</div>
+					<div class="info-value" onclick="window.location.href='https://ssmail.sslabs.online/profiles/SkenSMasteR'">ssmail.sslabs.online</div>
+				</div>
+			</div>
+			<a href="https://sslabs.online/#contact" class="contact-button">Contact Me</a>
+		</div>
+	</div>
+</body>
+</html>
