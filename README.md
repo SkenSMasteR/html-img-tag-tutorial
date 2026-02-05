@@ -9,6 +9,9 @@ This is an interactive HTML tutorial I coded to teach my classmates in middle sc
 Check out the live tutorial at:  
 **demo.sslabs.online/html-img-tag-tutorial/**
 
+## Tip
+
+Use the arrow keys to go forward, backward, and reset.
 
 
 **Coded with ❤️ by SkenSMasteR**  
