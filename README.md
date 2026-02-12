@@ -7,7 +7,7 @@ This is an interactive HTML tutorial I coded to teach my classmates in middle sc
 ## Live Demo
 
 Check out the live tutorial at:  
-**demo.sslabs.online/html-img-tag-tutorial/**
+**https://demo.sslabs.online/html-img-tag-tutorial/**
 
 ## Tip
 
